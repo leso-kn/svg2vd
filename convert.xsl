@@ -6,6 +6,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
 
+    <xsl:param name="layer"/>
+
     <xsl:output
         method="xml"
         indent="yes"
@@ -418,17 +420,20 @@
 
     <!-- <group> -->
     <xsl:template match="s:g">
-        <group android:name="{@inkscape:label|@id}">
-            <xsl:if test="contains(@transform, 'translate(')">
-                <xsl:attribute name="android:translateX">
-                    <xsl:value-of select="substring-before(substring-after(@transform, 'translate('), ',')" />
-                </xsl:attribute>
-                <xsl:attribute name="android:translateY">
-                    <xsl:value-of select="substring-before(substring-after(substring-after(@transform, 'translate('), ','), ')')" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:apply-templates />
-        </group>
+        <!-- If only a specific layer is to be exported, check the group id against the specified layer name -->
+        <xsl:if test="not($layer) or ancestor::g or @id = $layer">
+            <group android:name="{@inkscape:label|@id}">
+                <xsl:if test="contains(@transform, 'translate(')">
+                    <xsl:attribute name="android:translateX">
+                        <xsl:value-of select="substring-before(substring-after(@transform, 'translate('), ',')" />
+                    </xsl:attribute>
+                    <xsl:attribute name="android:translateY">
+                        <xsl:value-of select="substring-before(substring-after(substring-after(@transform, 'translate('), ','), ')')" />
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates />
+            </group>
+        </xsl:if>
     </xsl:template>
 
     <!-- <path> -->
