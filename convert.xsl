@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:s="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:aapt="http://schemas.android.com/aapt"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
@@ -135,7 +136,7 @@
                     <!-- Use sub-element to describe fill -->
                     <aapt:attr name="android:fillColor">
                         <xsl:call-template name="linearGradient">
-                            <xsl:with-param name="svg-el" select="../*[@id=substring-before(substring($fill, 6), ')')]" />
+                            <xsl:with-param name="svg-el" select="/s:svg/s:defs/s:linearGradient[@id=substring-before(substring($fill, 6), ')')]|//s:linearGradient[@id=substring-before(substring($fill, 6), ')')]" />
                         </xsl:call-template>
                     </aapt:attr>
                 </xsl:when>
@@ -308,7 +309,7 @@
                     <!-- Use sub-element to describe stroke -->
                     <aapt:attr name="android:strokeColor">
                         <xsl:call-template name="linearGradient">
-                            <xsl:with-param name="svg-el" select="../*[@id=substring-before(substring($stroke, 6), ')')]" />
+                            <xsl:with-param name="svg-el" select="/s:svg/s:defs/s:linearGradient[@id=substring-before(substring($stroke, 6), ')')]|//s:linearGradient[@id=substring-before(substring($stroke, 6), ')')]" />
                         </xsl:call-template>
                     </aapt:attr>
                 </xsl:when>
@@ -375,7 +376,7 @@
                   android:endY="{$svg-el/@y2}"
                   android:type="linear">
 
-            <xsl:for-each select="$svg-el/*[name()='stop']">
+            <xsl:for-each select="(/s:svg/s:defs/s:linearGradient[@id=substring($svg-el/@xlink:href, 2)]|//s:linearGradient[@id=substring($svg-el/@xlink:href, 2)]|$svg-el)/s:stop">
                 <xsl:variable name="hex-opac">
                     <xsl:call-template name="bytes-to-hex">
                         <xsl:with-param name="opac" select="round(substring(@style, 33) * 255)" />
