@@ -29,6 +29,7 @@ Currently supports:
   * Polygons
   * Rectangles
   * Circles
+  * Ellipses
   * Lines
   * SVG Groups (group name and transform)
 * Most common attributes
