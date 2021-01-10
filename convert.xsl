@@ -517,7 +517,7 @@
 
         <xsl:variable name="paint-order-stroke-first"><xsl:call-template name="get-attr-paint-order-stroke-first" /></xsl:variable>
 
-        <path android:pathData="M{@x},{@y}l{@width},{@height}z">
+        <path android:pathData="M{@x},{@y}l{@width},0l0,{@height}l{-@width},0l0,{-@height}z">
             <xsl:call-template name="set-attr-stroke">
                 <xsl:with-param name="stroke" select="$stroke" />
                 <xsl:with-param name="stroke-width" select="$stroke-width * (1 - 0.5 * number($paint-order-stroke-first = 'true'))" />
