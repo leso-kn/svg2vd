@@ -563,6 +563,53 @@
         </path>
     </xsl:template>
 
+    <!-- <ellipse> -->
+    <xsl:template match="s:ellipse">
+        <xsl:variable name="fill"><xsl:call-template name="get-attr-fill" /></xsl:variable>
+        <xsl:variable name="fill-opacity"><xsl:call-template name="get-attr-fill-opacity" /></xsl:variable>
+
+        <xsl:variable name="stroke"><xsl:call-template name="get-attr-stroke" /></xsl:variable>
+        <xsl:variable name="stroke-width"><xsl:call-template name="get-attr-stroke-width" /></xsl:variable>
+        <xsl:variable name="stroke-linecap"><xsl:call-template name="get-attr-stroke-linecap" /></xsl:variable>
+        <xsl:variable name="stroke-opacity"><xsl:call-template name="get-attr-stroke-opacity" /></xsl:variable>
+        
+        <xsl:variable name="paint-order-stroke-first"><xsl:call-template name="get-attr-paint-order-stroke-first" /></xsl:variable>
+
+        <xsl:variable name="rx">
+            <xsl:choose>
+                <xsl:when test="$paint-order-stroke-first">
+                    <xsl:value-of select="@rx + $stroke-width * 0.5" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@rx" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="ry">
+            <xsl:choose>
+                <xsl:when test="$paint-order-stroke-first">
+                    <xsl:value-of select="@ry + $stroke-width * 0.5" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@ry" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <path android:pathData="M{@cx - $rx},{@cy}c0,{-$ry * 0.5} {$rx * 0.5},{-$ry} {$rx},{-$ry}c{$rx * 0.5},0 {$rx},{$ry * 0.5} {$rx},{$ry}c0,{$ry * 0.5} {-$rx * 0.5},{$ry} {-$rx},{$ry}c{-$rx * 0.5},0 {-$rx},{-$ry * 0.5} {-$rx},{-$ry}z">
+            <xsl:call-template name="set-attr-stroke">
+                <xsl:with-param name="stroke" select="$stroke" />
+                <xsl:with-param name="stroke-width" select="$stroke-width * (1 - 0.5 * number($paint-order-stroke-first = 'true'))" />
+                <xsl:with-param name="stroke-linecap" select="$stroke-linecap" />
+                <xsl:with-param name="stroke-opacity" select="$stroke-opacity" />
+            </xsl:call-template>
+
+            <xsl:call-template name="set-attr-fill">
+                <xsl:with-param name="fill" select="$fill" />
+                <xsl:with-param name="fill-opacity" select="$fill-opacity" />
+            </xsl:call-template>
+        </path>
+    </xsl:template>
+
     <!-- <line> -->
     <xsl:template match="s:line">
         <xsl:variable name="stroke"><xsl:call-template name="get-attr-stroke" /></xsl:variable>
