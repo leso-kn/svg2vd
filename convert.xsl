@@ -370,16 +370,43 @@
 
     <xsl:template name="linearGradient">
         <xsl:param name="svg-el" />
-        <gradient android:startX="{$svg-el/@x1}"
-                  android:startY="{$svg-el/@y1}"
-                  android:endX="{$svg-el/@x2}"
-                  android:endY="{$svg-el/@y2}"
+
+        <xsl:variable name="translateX">
+            <xsl:choose>
+                <xsl:when test="contains($svg-el/@gradientTransform, 'translate(')">
+                    <xsl:value-of select="substring-before(substring-after($svg-el/@gradientTransform, 'translate('), ',')" />
+                </xsl:when>
+                <xsl:otherwise>0</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="translateY">
+            <xsl:choose>
+                <xsl:when test="contains($svg-el/@gradientTransform, 'translate(')">
+                    <xsl:value-of select="substring-before(substring-after(substring-after($svg-el/@gradientTransform, 'translate('), ','), ')')" />
+                </xsl:when>
+                <xsl:otherwise>0</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <gradient android:startX="{$svg-el/@x1 + $translateX}"
+                  android:startY="{$svg-el/@y1 + $translateY}"
+                  android:endX="{$svg-el/@x2 + $translateX}"
+                  android:endY="{$svg-el/@y2 + $translateY}"
                   android:type="linear">
 
             <xsl:for-each select="(/s:svg/s:defs/s:linearGradient[@id=substring($svg-el/@xlink:href, 2)]|//s:linearGradient[@id=substring($svg-el/@xlink:href, 2)]|$svg-el)/s:stop">
                 <xsl:variable name="hex-opac">
                     <xsl:call-template name="bytes-to-hex">
-                        <xsl:with-param name="opac" select="round(substring(@style, 33) * 255)" />
+                        <xsl:with-param name="opac">
+                            <xsl:choose>
+                            <xsl:when test="contains(substring(@style, 33), ';')">
+                                <xsl:value-of select="round(substring-before(substring(@style, 33), ';') * 255)" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="round(substring(@style, 33) * 255)" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        </xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
                 <item android:offset="{@offset}">
