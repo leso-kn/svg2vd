@@ -577,14 +577,14 @@
         <xsl:variable name="r">
             <xsl:choose>
                 <xsl:when test="$paint-order-stroke-first">
-                    <xsl:value-of select="@r + $stroke-width * 0.5" />
+                    <xsl:value-of select="@r" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="@r" />
+                    <xsl:value-of select="@r - $stroke-width * 0.5" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <path android:pathData="M{@cx - $r},{@cy}c0,{-$r * 0.5} {$r * 0.5},{-$r} {$r},{-$r}c{$r * 0.5},0 {$r},{$r * 0.5} {$r},{$r}c0,{$r * 0.5} {-$r * 0.5},{$r} {-$r},{$r}c{-$r * 0.5},0 {-$r},{-$r * 0.5} {-$r},{-$r}z">
+        <path android:pathData="M{@cx - $r},{@cy}c0,{-$r * 0.55175} {$r * 0.44825},{-$r} {$r},{-$r}c{$r * 0.55175},0 {$r},{$r * 0.44825} {$r},{$r}c0,{$r * 0.55175} {-$r * 0.44825},{$r} {-$r},{$r}c{-$r * 0.55175},0 {-$r},{-$r * 0.44825} {-$r},{-$r}z">
             <xsl:call-template name="set-attr-stroke">
                 <xsl:with-param name="stroke" select="$stroke" />
                 <xsl:with-param name="stroke-width" select="$stroke-width * (1 - 0.5 * number($paint-order-stroke-first = 'true'))" />
@@ -614,24 +614,24 @@
         <xsl:variable name="rx">
             <xsl:choose>
                 <xsl:when test="$paint-order-stroke-first">
-                    <xsl:value-of select="@rx + $stroke-width * 0.5" />
+                    <xsl:value-of select="@rx" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="@rx" />
+                    <xsl:value-of select="@rx - $stroke-width * 0.5" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="ry">
             <xsl:choose>
                 <xsl:when test="$paint-order-stroke-first">
-                    <xsl:value-of select="@ry + $stroke-width * 0.5" />
+                    <xsl:value-of select="@ry" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="@ry" />
+                    <xsl:value-of select="@ry - $stroke-width * 0.5" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <path android:pathData="M{@cx - $rx},{@cy}c0,{-$ry * 0.5} {$rx * 0.5},{-$ry} {$rx},{-$ry}c{$rx * 0.5},0 {$rx},{$ry * 0.5} {$rx},{$ry}c0,{$ry * 0.5} {-$rx * 0.5},{$ry} {-$rx},{$ry}c{-$rx * 0.5},0 {-$rx},{-$ry * 0.5} {-$rx},{-$ry}z">
+        <path android:pathData="M{@cx - $rx},{@cy}c0,{-$ry * 0.55175} {$rx * 0.44825},{-$ry} {$rx},{-$ry}c{$rx * 0.55175},0 {$rx},{$ry * 0.44825} {$rx},{$ry}c0,{$ry * 0.55175} {-$rx * 0.44825},{$ry} {-$rx},{$ry}c{-$rx * 0.55175},0 {-$rx},{-$ry * 0.44825} {-$rx},{-$ry}z">
             <xsl:call-template name="set-attr-stroke">
                 <xsl:with-param name="stroke" select="$stroke" />
                 <xsl:with-param name="stroke-width" select="$stroke-width * (1 - 0.5 * number($paint-order-stroke-first = 'true'))" />
