@@ -333,7 +333,10 @@
     <!-- Rendering -->
 
     <xsl:template name="get-attr-paint-order-stroke-first">
+        <xsl:variable name="fill"><xsl:call-template name="get-attr-fill" /></xsl:variable>
+
         <xsl:choose>
+            <xsl:when test="$fill = 'none'">false</xsl:when>
             <xsl:when test="@paint-order">
                 <xsl:value-of select="contains(@paint-order, 'stroke fill')" />
             </xsl:when>
